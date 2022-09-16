@@ -13,26 +13,36 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   /**
    * Creates a new user with the given details.
    *
-   * @param body User email and password
+   * @param body - User email and password
+   * @returns New user
    */
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body.email, body.password);
+    return this.authService.signup(body.email, body.password);
+  }
+
+  @Post('/signin')
+  signin(@Body() body: CreateUserDto) {
+    return this.authService.signin(body.email, body.password);
   }
 
   /**
    * Find a user given their id.
    *
-   * @param id Id to look for.
+   * @param id - ID to look for.
    * @returns User with matching id.
    */
   @Get('/:id')
@@ -43,7 +53,7 @@ export class UsersController {
   /**
    * Find all users associated to a given email address.
    *
-   * @param email Email address to look for.
+   * @param email - Email address to look for.
    * @returns Array of matching users.
    */
   @Get()
@@ -54,8 +64,8 @@ export class UsersController {
   /**
    * Update a user with a given id.
    *
-   * @param id User id.
-   * @param body User attributes to update.
+   * @param id - User id.
+   * @param body - User attributes to update.
    * @returns Updated user.
    */
   @Patch('/:id')
@@ -66,7 +76,7 @@ export class UsersController {
   /**
    * Remove a user with a given id.
    *
-   * @param id Id of the user to remove.
+   * @param id - ID of the user to remove.
    * @returns Removed user.
    */
   @Delete('/:id')
