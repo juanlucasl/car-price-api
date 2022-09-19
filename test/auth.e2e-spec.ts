@@ -28,4 +28,26 @@ describe('Authentication (e2e)', () => {
         expect(email).toEqual(mockMail);
       });
   });
+
+  it("signs up a new user and gets it's session", async () => {
+    const mockMail = 'mock@mail.com';
+
+    // Signup as a new user and get a session cookie.
+    const signupResponse = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email: mockMail, password: 'dummy' })
+      .expect(201);
+    const cookie = signupResponse.get('Set-Cookie');
+
+    // Send a request to /auth/whoami with the session cookie.
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie)
+      .expect(200);
+
+    // Expect the User to be signed-in and their id and user email to exist in
+    // the response from /auth/whoami
+    expect(body.id).toBeDefined();
+    expect(body.email).toEqual(mockMail);
+  });
 });
