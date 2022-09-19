@@ -3,7 +3,10 @@
 /node_modules
 
 # SQLite
-db.sqlite
+*.sqlite
+
+# .env
+.env.*
 
 # Logs
 logs
