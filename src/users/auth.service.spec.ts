@@ -1,8 +1,8 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersService } from './users.service';
 import { User } from './user.entity';
+import { UsersService } from './users.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -17,7 +17,11 @@ describe('AuthService', () => {
         return Promise.resolve(filteredUsers);
       },
       create: (email: string, password: string) => {
-        const user = { id: Math.ceil(Math.random() * 100000), email, password };
+        const user = {
+          id: Math.ceil(Math.random() * 100000),
+          email,
+          password,
+        } as User;
         users.push(user);
         return Promise.resolve(user);
       },

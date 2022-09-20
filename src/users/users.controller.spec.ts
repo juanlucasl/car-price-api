@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
+import { UsersController } from './users.controller';
+import { User } from './user.entity';
+import { UsersService } from './users.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -15,15 +16,15 @@ describe('UsersController', () => {
           id,
           email: 'dummy@mail.com',
           password: 'dummy',
-        });
+        } as User);
       },
       find: (email: string) => {
-        return Promise.resolve([{ id: 1, email, password: 'dummy' }]);
+        return Promise.resolve([{ id: 1, email, password: 'dummy' } as User]);
       },
     };
     mockAuthService = {
       signin: (email: string, password: string) => {
-        return Promise.resolve({ id: 1, email, password });
+        return Promise.resolve({ id: 1, email, password } as User);
       },
     };
 
