@@ -19,6 +19,14 @@ import { Serialize } from '../interceptors/serialize.interceptor';
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
 
+  /**
+   * Creates a new report with the given details.
+   * Only signed-in users can do this.
+   *
+   * @param body - Report data.
+   * @param user - User creating the report.
+   * @returns Newly created report.
+   */
   @Post()
   @UseGuards(AuthGuard)
   @Serialize(ReportDto)
@@ -26,6 +34,13 @@ export class ReportsController {
     return this.reportsService.create(body, user);
   }
 
+  /**
+   * Given the id of a report, changes its current approval status.
+   *
+   * @param id - Report id.
+   * @param body - Approval data. It should have a boolean 'approved' property.
+   * @returns The updated report.
+   */
   @Patch('/:id')
   approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
     return this.reportsService.changeApproval(id, body.approved);

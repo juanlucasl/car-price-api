@@ -11,6 +11,13 @@ export class ReportsService {
     @InjectRepository(Report) private repository: Repository<Report>,
   ) {}
 
+  /**
+   * Creates a new report with the given details.
+   *
+   * @param reportDto- Report data.
+   * @param user- User creating the report.
+   * @returns Newly created report.
+   */
   create(reportDto: CreateReportDto, user: User) {
     const newReport = this.repository.create(reportDto);
     newReport.user = user;
@@ -18,6 +25,13 @@ export class ReportsService {
     return this.repository.save(newReport);
   }
 
+  /**
+   * Given the id of a report, changes its current approval status.
+   *
+   * @param id - Report id.
+   * @param approved - Approval data. It should have a boolean 'approved' property.
+   * @returns The updated report.
+   */
   async changeApproval(id: string, approved: boolean) {
     const report = await this.repository.findOneBy({ id: parseInt(id) });
 
