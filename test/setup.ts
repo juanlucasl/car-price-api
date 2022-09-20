@@ -1,6 +1,5 @@
 import { rm } from 'fs/promises';
 import { join } from 'path';
-import { getConnection } from 'typeorm';
 
 global.beforeEach(async () => {
   try {
