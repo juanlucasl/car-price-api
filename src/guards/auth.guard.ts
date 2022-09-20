@@ -1,12 +1,12 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
 
+/**
+ * Validates that a client sending a request is signed in to the application.
+ */
 export class AuthGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
 
-    return request.session.userId;
+    return !!request.session.userId;
   }
 }
